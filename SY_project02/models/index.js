@@ -4,9 +4,14 @@ const Sequelize = require("sequelize");
 const process = require("process");
 const env = process.env.NODE_ENV || "development";
 const config = require(__dirname + "/../config/config.json")[env];
-// const fs = require("fs");
-// const path = require("path");
-// const basename = path.basename(__filename);
+const User = require("./User");
+const Product = require("./Product");
+const Payment = require("./Payment");
+const OrderItem = require("./OrderItem");
+const Order = require("./Order");
+const CartItem = require("./CartItem");
+const Admin = require("./Admin");
+const Cart = require("./Cart");
 
 const db = {};
 
@@ -18,6 +23,30 @@ const sequelize = new Sequelize(
 );
 
 db.sequelize = sequelize;
-db.Sequelize = Sequelize;
+db.User = User;
+db.Product = Product;
+db.Payment = Payment;
+db.OrderItem = OrderItem;
+db.Order = Order;
+db.CartItem = CartItem;
+db.Admin = Admin;
+db.Cart = Cart;
+
+User.init(sequelize);
+Product.init(sequelize);
+Payment.init(sequelize);
+OrderItem.init(sequelize);
+Order.init(sequelize);
+CartItem.init(sequelize);
+Admin.init(sequelize);
+Cart.init(sequelize);
+
+User.associate(db);
+Product.associate(db);
+Payment.associate(db);
+OrderItem.associate(db);
+Order.associate(db);
+CartItem.associate(db);
+Cart.associate(db);
 
 module.exports = db;
