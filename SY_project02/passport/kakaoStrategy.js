@@ -1,7 +1,7 @@
 const passport = require("passport");
 const KakaoStrategy = require("passport-kakao").Strategy;
 
-const User = require("../models/user");
+const User = require("../models/User");
 
 module.exports = () => {
   passport.use(
@@ -22,7 +22,7 @@ module.exports = () => {
             const newUser = await User.create({
               email:
                 profile._json && profile._json.kakao_account_email,
-              nick: profile.displayName,
+              nickname: profile.displayName,
               snsId: profile.id,
               provider: "kakao",
             });

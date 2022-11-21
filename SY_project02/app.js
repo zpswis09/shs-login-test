@@ -72,14 +72,6 @@ app.use((err, req, res, next) => {
 const port = process.env.PORT || 8000;
 
 //서버 접속 실패시 로그를 뿌리도록 비동기 함수로 세팅
-const start = async () => {
-  try {
-    app.listen(port, () =>
-      console.log(`Server is listening on port ${port}...`)
-    );
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-start();
+app.listen(app.get(port), () => {
+  console.log(app.get(port), "번 포트에서 대기 중");
+});
