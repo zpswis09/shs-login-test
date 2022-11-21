@@ -67,6 +67,16 @@ app.use((err, req, res, next) => {
   res.render("error");
 });
 
-app.listen(app.get("port"), () => {
-  console.log("Server is listening on port", app.get("port"));
-});
+const port = process.env.PORT || 8000;
+
+const start = async () => {
+  try {
+    app.listen(port, () =>
+      console.log(`Server is listening on port ${port}...`)
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+start();
