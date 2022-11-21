@@ -5,7 +5,7 @@ const path = require("path");
 const session = require("express-session");
 const nunjucks = require("nunjucks");
 const dotenv = require("dotenv");
-// const passport = require("passport");
+const passport = require("passport");
 
 dotenv.config({ path: path.join(__dirname, "/.env") });
 
@@ -15,16 +15,18 @@ dotenv.config({ path: path.join(__dirname, "/.env") });
  */
 
 const { sequelize } = require("./models");
-// const passportConfig = require("./passport");
+const passportConfig = require("./passport");
 
 const app = express();
-// passportConfig();
-// app.set("port", process.env.PORT || 8001);
-// app.set("view engine", "html");
-// nunjucks.configure("views", {
-//   express: app,
-//   watch: true,
-// });
+
+passportConfig();
+app.set("port", process.env.PORT || 8001);
+app.set("view engine", "html");
+nunjucks.configure("views", {
+  express: app,
+  watch: true,
+});
+
 sequelize
   .sync({ force: true })
   .then(() => {
@@ -57,8 +59,8 @@ app.use(
     },
   })
 );
-// app.use(passport.initialize());
-// app.use(passport.session());
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use((err, req, res, next) => {
   res.locals.message = err.message;
@@ -69,6 +71,7 @@ app.use((err, req, res, next) => {
 
 const port = process.env.PORT || 8000;
 
+//서버 접속 실패시 로그를 뿌리도록 비동기 함수로 세팅
 const start = async () => {
   try {
     app.listen(port, () =>
