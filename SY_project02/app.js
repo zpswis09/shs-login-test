@@ -2,6 +2,7 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 const path = require("path");
+const cors = require("cors");
 const session = require("express-session");
 const nunjucks = require("nunjucks");
 const dotenv = require("dotenv");
@@ -12,12 +13,13 @@ dotenv.config({ path: path.join(__dirname, "/.env") });
 /**라우터 자리
  *
  *
+ *
  */
-
 const { sequelize } = require("./models");
 const passportConfig = require("./passport");
 
 const app = express();
+app.use(cors());
 
 passportConfig();
 app.set("port", process.env.PORT || 8001);
@@ -26,9 +28,17 @@ nunjucks.configure("views", {
   express: app,
   watch: true,
 });
+app.get("/", (req, res) => {
+  res.send({ message: "hello" });
+});
+
+app.post("/id", (req, res) => {
+  const serverId = req.body.id;
+  console.log(serverId);
+});
 
 sequelize
-  .sync({ force: true })
+  .sync({ force: false })
   .then(() => {
     console.log("DB Connected");
   })
@@ -59,6 +69,7 @@ app.use(
     },
   })
 );
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -69,7 +80,8 @@ app.use((err, req, res, next) => {
   res.render("error");
 });
 
+const port = process.env.PORT || 8001;
 //서버 접속 실패시 로그를 뿌리도록 비동기 함수로 세팅
-app.listen(app.get(port), () => {
-  console.log(app.get(port), "번 포트에서 대기 중");
+app.listen(port, () => {
+  console.log(`${port}`, "번 포트에서 대기 중");
 });
