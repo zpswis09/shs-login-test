@@ -1,0 +1,12 @@
+정규식
+email: 5~50자 @ 포함
+name: 특수문자X
+password: 8~16자, 영어, 숫자, 특수문자 포함 8~16자
+phone: 13자, 숫자, - 포함
+address: 특수문자 제한
+
+로그인
+/login ==> /auth ==> /
+
+회원가입
+/login ==> /register ==> /login ==> /
