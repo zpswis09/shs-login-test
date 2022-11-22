@@ -6,6 +6,7 @@ const session = require("express-session");
 const nunjucks = require("nunjucks");
 const dotenv = require("dotenv");
 const passport = require("passport");
+const cors = require("cors");
 
 dotenv.config({ path: path.join(__dirname, "/.env") });
 
@@ -13,6 +14,7 @@ dotenv.config({ path: path.join(__dirname, "/.env") });
  *
  *
  */
+const authRouter = require("./routes/auth")
 
 const { sequelize } = require("./models");
 const passportConfig = require("./passport");
@@ -28,13 +30,20 @@ nunjucks.configure("views", {
 });
 
 sequelize
-  .sync({ force: true })
+  .sync({ alter: true, force: false })
   .then(() => {
     console.log("DB Connected");
   })
   .catch((err) => {
     console.error(err);
   });
+
+let corsOptions = {
+    orgin: "*",
+    Credential: true,
+};
+
+app.use(cors(corsOptions));
 
 app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname, "public")));
@@ -62,6 +71,8 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use("/auth", authRouter);
+
 app.use((err, req, res, next) => {
   res.locals.message = err.message;
   res.locals.error = process.env.NODE_ENV !== "production" ? err : {};
@@ -70,6 +81,6 @@ app.use((err, req, res, next) => {
 });
 
 //서버 접속 실패시 로그를 뿌리도록 비동기 함수로 세팅
-app.listen(app.get(port), () => {
-  console.log(app.get(port), "번 포트에서 대기 중");
+app.listen(app.get("port"), () => {
+  console.log(app.get("port"), "번 포트에서 대기 중");
 });

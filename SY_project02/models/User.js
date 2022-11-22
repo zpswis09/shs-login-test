@@ -4,11 +4,11 @@ module.exports = class User extends Sequelize.Model {
   static init(sequelize) {
     return super.init(
       {
-        email: {
-          type: Sequelize.STRING(50),
-          allowNull: true,
-          unique: true,
-        },
+          email: {
+              type: Sequelize.STRING(50),
+              allowNull: true,
+              unique: true,
+          },
         name: {
           type: Sequelize.STRING(30),
           allowNull: false,
@@ -17,11 +17,11 @@ module.exports = class User extends Sequelize.Model {
           type: Sequelize.STRING(15),
           allowNull: false,
         },
-        provider: {
-          type: Sequelize.STRING(10),
-          allowNull: false,
-          defaultValue: "local",
-        },
+        // provider: {
+        //   type: Sequelize.STRING(10),
+        //   allowNull: false,
+        //   defaultValue: "local",
+        // },
         snsId: {
           type: Sequelize.STRING(30),
           allowNull: true,
@@ -34,6 +34,10 @@ module.exports = class User extends Sequelize.Model {
           type: Sequelize.STRING(13),
           allowNull: true,
         },
+        address: {
+          type: Sequelize.STRING(200),
+          allowNull: true,
+        }
       },
       {
         sequelize,
